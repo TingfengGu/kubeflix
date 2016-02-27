@@ -17,24 +17,34 @@ Instructions
 To build to the project:
 
     mvn clean install   
-    
-### Starting the discovery server
-   
-    cd server
-    mvn clean package docker:build fabric8:apply
 
-
-### Starting the dashboars
-     
-     cd dashboard
-     kubectl create -f controller.yml
-     kubectl create -f service.yml
-     
-    
-### Running the example    
+        
+### Running a Hystrix example    
 To start the a hystrix example
 
      cd examples/hello-hystrix
      mvn clean package docker:build fabric8:apply
      
+This example is a simple hello world servlet, that uses a hystrix command to obtain the hello world message.
+You can access the servlet at: http://hello-hystrix.vagrant.f8/hello (or wherever the hello-hystrix service is bound).
+The metrics stream for this example shoule be available at at: http://hello-hystrix.vagrant.f8/hello (or wherever the hello-hystrix service is bound).
+
+You can scale up the controller hello-hystrix controller to create more pods running the example.
      
+### Starting the discovery server
+   
+    cd server
+    mvn clean package docker:build fabric8:apply
+
+The discovery server will discover all endpoints providing a hystrix stream (contain the label: **hystrix.enabled**=true)
+You can access the aggregated stream at http://kurbine-server.vagrant.f8/turbine.stream (or wherever the kurbine-server service is bound).
+
+
+### Starting the dashboard
+     
+     cd dashboard
+     kubectl create -f controller.yml
+     kubectl create -f service.yml
+
+Open your browser at: http://hystrix-dashboard.vagrant.f8:8080  and enter the url of the aggragated stream  http://kurbine-server.vagrant.f8/turbine.stream
+Et voila!
