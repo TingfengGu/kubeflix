@@ -48,7 +48,7 @@ public class KubernetesDiscovery implements InstanceDiscovery {
         List<Instance> result = new ArrayList<Instance>();
         for (Endpoints endpoint : client.endpoints().withLabels(labels).list().getItems()) {
             try {
-                result.add(toInstance(endpoint));
+                result.addAll(toInstances(endpoint));
             } catch (Throwable t) {
                 LOGGER.error("Error processing endpoint", t);
             }
@@ -66,27 +66,16 @@ public class KubernetesDiscovery implements InstanceDiscovery {
     }
 
 
-    private static Instance toInstance(Endpoints e) {
-        if (e.getSubsets().isEmpty()) {
-            throw new IllegalArgumentException("Endpoint e is not valid: Has not subsets");
-        } else if (e.getSubsets().size() > 1) {
-            throw new IllegalArgumentException("Endpoint e is not valid: Has too many subsets");
-        } else {
+    private static List<Instance> toInstances(Endpoints e) {
+        List<Instance> result = new ArrayList<Instance>();
+        for (EndpointSubset subset : e.getSubsets()) {
             String clusterName = e.getMetadata().getLabels().containsKey(HYSTRIX_CLUSTER) ?
                     e.getMetadata().getLabels().get(HYSTRIX_CLUSTER) :
                     DEFAULT;
-            EndpointAddress endpointAddress = toAddress(e.getSubsets().get(0));
-            return new Instance(endpointAddress.getIp(), clusterName, true);
+            for (EndpointAddress address : subset.getAddresses()) {
+                result.add(new Instance(address.getIp(), clusterName, true));
+            }
         }
-    }
-
-    private static EndpointAddress toAddress(EndpointSubset e) {
-        if (e.getAddresses().isEmpty()) {
-            throw new IllegalArgumentException("EndpointSubset e is not valid: Has not addresses");
-        } else if (e.getAddresses().size() > 1) {
-            throw new IllegalArgumentException("EndpointSubset e is not valid: Has too many addresses");
-        } else {
-            return e.getAddresses().get(0);
-        }
+        return result;
     }
 }
