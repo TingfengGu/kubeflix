@@ -25,8 +25,8 @@
     </properties>
 
     <modules>
-        <module>discovery</module>
-        <module>server</module>
+        <module>turbine-discovery</module>
+        <module>turbine-server</module>
         <module>examples</module>
     </modules>
 
