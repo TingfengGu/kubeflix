@@ -3,27 +3,30 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>io.fabric8.kurbine</groupId>
         <artifactId>kurbine-project</artifactId>
+        <groupId>io.fabric8.kurbine</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.fabric8.kurbine</groupId>
-    <artifactId>kurbine-discovery</artifactId>
-    <name>Fabric8 :: Kurbine :: Turbine :: Discovery</name>
+    <artifactId>ribbon-discovery</artifactId>
+    <name>Fabric8 :: Kurbine :: Ribbon :: Discovery</name>
 
     <dependencies>
         <dependency>
-            <groupId>com.netflix.turbine</groupId>
-            <artifactId>turbine-core</artifactId>
-            <version>${turbine.version}</version>
+            <groupId>com.netflix.ribbon</groupId>
+            <artifactId>ribbon-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.netflix.ribbon</groupId>
+            <artifactId>ribbon-loadbalancer</artifactId>
         </dependency>
 
         <dependency>
             <groupId>io.fabric8</groupId>
             <artifactId>kubernetes-client</artifactId>
-            <version>${kubernetes-client.version}</version>
         </dependency>
     </dependencies>
 

@@ -16,6 +16,7 @@
 
     <modules>
         <module>hello-hystrix</module>
+        <module>hello-ribbon</module>
     </modules>
 
 
